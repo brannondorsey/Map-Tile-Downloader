@@ -1,7 +1,7 @@
 <?php
 
 if (count($argv) == 1) {
-	echo "usage: latitude longitude distance min_zoom max_zoom map_directory\n";
+	echo "usage: latitude longitude distance min_zoom max_zoom map_directory map_provider_url\n";
 	exit;
 }
 
@@ -11,6 +11,8 @@ $DISTANCE = isset($argv[3]) ? $argv[3] : 1;
 $MIN_ZOOM = isset($argv[4]) ? $argv[4] : 0;
 $MAX_ZOOM = isset($argv[5]) ? $argv[5] : 18;
 $MAP_DIR = isset($argv[6]) ? $argv[6] : "map/";
+$MAP_URL = isset($argv[7]) ? $argv[7] : "http://a.tile.openstreetmap.org";
+$MAP_AUTH = isset($argv[8]) ? $argv[8] : "";
 
 if ($LATITUDE > 90 || $LATITUDE < -90) {
 	echo "Latitude must be between 90 and -90.\n";
@@ -106,7 +108,7 @@ for ($zoom = $MIN_ZOOM; $zoom <= $MAX_ZOOM; ++$zoom) {
 
 		foreach ($y_array as $ky => $y) {
 
-			$url = "http://a.tile.openstreetmap.org/$zoom/$x/$y.png";
+			$url = "$MAP_URL/$zoom/$x/$y.png$MAP_AUTH";
 			$filename = $MAP_DIR.$zoom."/".$x."/".$y.".png";
 
 			if (!file_put_contents($filename, fopen($url, 'r'))) {
